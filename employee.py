@@ -1,31 +1,81 @@
-"""Employee pay calculator."""
-"""ENTER YOUR SOLUTION HERE!"""
-
 class Employee:
     def __init__(self, name):
         self.name = name
+        self.contractType = None
+        self.contractDetails = None
+        self.commissionType = None
+        self.commissionDetails = None
+
+    def setMonthlySalary(self, salary):
+        self.contractType = "monthly"
+        self.contractDetails = salary
+
+    def setHourlyContract(self, hoursWorked, hourlyRate):
+        self.contractType = "hourly"
+        self.contractDetails = {"hoursWorked": hoursWorked, "hourlyRate": hourlyRate}
+
+    def setBonusCommission(self, bonusAmount):
+        self.commissionType = "bonus"
+        self.commissionDetails = bonusAmount
+
+    def setContractCommission(self, numContracts, commissionPerContract):
+        self.commissionType = "contract"
+        self.commissionDetails = {"numContracts": numContracts, "commissionPerContract": commissionPerContract}
 
     def get_pay(self):
-        pass
+        if self.contractType == "monthly":
+            contractPay = self.contractDetails
+        elif self.contractType == "hourly":
+            contractPay = self.contractDetails["hoursWorked"] * self.contractDetails["hourlyRate"]
+        else:
+            contractPay = 0
+
+        if self.commissionType == "bonus":
+            commissionPay = self.commissionDetails
+        elif self.commissionType == "contract":
+            commissionPay = self.commissionDetails["numContracts"] * self.commissionDetails["commissionPerContract"]
+        else:
+            commissionPay = 0
+
+        return contractPay + commissionPay
 
     def __str__(self):
-        return self.name
+        contractInfo = ""
+        commissionInfo = ""
 
+        if self.contractType == "monthly":
+            contractInfo = f"works on a monthly salary of {self.contractDetails}"
+        elif self.contractType == "hourly":
+            contractInfo = f"works on a contract of {self.contractDetails['hoursWorked']} hours at {self.contractDetails['hourlyRate']}/hour"
 
-# Billie works on a monthly salary of 4000.  Their total pay is 4000.
+        if self.commissionType == "bonus":
+            commissionInfo = f"receives a bonus commission of {self.commissionDetails}"
+        elif self.commissionType == "contract":
+            commissionInfo = f"receives a commission for {self.commissionDetails['numContracts']} contract(s) at {self.commissionDetails['commissionPerContract']}/contract"
+
+        totalPay = self.get_pay()
+        if commissionInfo:
+            return f"{self.name} {contractInfo} and {commissionInfo}. Their total pay is {totalPay}."
+        return f"{self.name} {contractInfo}. Their total pay is {totalPay}."
+
 billie = Employee('Billie')
+billie.setMonthlySalary(4000)
 
-# Charlie works on a contract of 100 hours at 25/hour.  Their total pay is 2500.
 charlie = Employee('Charlie')
+charlie.setHourlyContract(100, 25)
 
-# Renee works on a monthly salary of 3000 and receives a commission for 4 contract(s) at 200/contract.  Their total pay is 3800.
 renee = Employee('Renee')
+renee.setMonthlySalary(3000)
+renee.setContractCommission(4, 200)
 
-# Jan works on a contract of 150 hours at 25/hour and receives a commission for 3 contract(s) at 220/contract.  Their total pay is 4410.
 jan = Employee('Jan')
+jan.setHourlyContract(150, 25)
+jan.setContractCommission(3, 220)
 
-# Robbie works on a monthly salary of 2000 and receives a bonus commission of 1500.  Their total pay is 3500.
 robbie = Employee('Robbie')
+robbie.setMonthlySalary(2000)
+robbie.setBonusCommission(1500)
 
-# Ariel works on a contract of 120 hours at 30/hour and receives a bonus commission of 600.  Their total pay is 4200.
 ariel = Employee('Ariel')
+ariel.setHourlyContract(120, 30)
+ariel.setBonusCommission(600)
